@@ -56,7 +56,7 @@ exports.getStores = async (req, res) => {
     // 1. query database for list of ALL stores
     const stores = await Store.find();
 
-    res.render('stores', { title: 'Stores', stores} );
+    res.render('stores', { title: 'Stores', stores });
 };
 
 exports.editStore = async (req, res) => {
@@ -65,7 +65,7 @@ exports.editStore = async (req, res) => {
     // 2. Confirm user is owner of store 
     // **TODO**
     // 3. Render out edit form so user can update store 
-    res.render('editStore', { title: `Edit ${store.name}`, store} );
+    res.render('editStore', { title: `Edit ${store.name}`, store });
 };
 
 exports.updateStore = async (req, res) => {
@@ -74,7 +74,7 @@ exports.updateStore = async (req, res) => {
 
     // find store in database and update 
     const store = await Store.findOneAndUpdate(
-        {_id: req.params.id},
+        { _id: req.params.id },
         req.body,
         {
             new: true, // return the updated store instead of the old one.
@@ -92,4 +92,12 @@ exports.getStoreBySlug = async (req, res, next) => {
     const store = await Store.findOne({ slug: req.params.slug }); // get slug from URL
     if (!store) return next(); // if invalid store, skip. 
     res.render('store', { store, title: store.name }); // if valid, render store page. 
+};
+
+exports.getStoresByTag = async (req, res) => {
+    // get list of all stores
+    const tags = await Store.getTagsList(); // custom method in models/Store.js Schema
+    const tag = req.params.tag;
+
+    res.render('tag', { tags, title: 'Tags', tag });
 };

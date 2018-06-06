@@ -30,4 +30,8 @@ router.get('/stores/:id/edit', catchErrors(storeController.editStore));
 // view store route 
 router.get('/store/:slug', catchErrors(storeController.getStoreBySlug));
 
+// routes for tags page
+router.get('/tags', catchErrors(storeController.getStoresByTag));
+router.get('/tags/:tag', catchErrors(storeController.getStoresByTag));
+
 module.exports = router;
