@@ -95,9 +95,12 @@ exports.getStoreBySlug = async (req, res, next) => {
 };
 
 exports.getStoresByTag = async (req, res) => {
-    // get list of all stores
-    const tags = await Store.getTagsList(); // custom method in models/Store.js Schema
     const tag = req.params.tag;
+    const tagQuery = tag || { $exists: true } // give me every store with at least one tag on it 
 
-    res.render('tag', { tags, title: 'Tags', tag });
+    const tagsPromise = Store.getTagsList(); // custom method in models/Store.js Schema
+    const storesPromise = Store.find({ tags: tagQuery }); // if store contains specific tag, will filter out for us
+    const [tags, stores] = await Promise.all([tagsPromise, storesPromise]); // wait for both promises to resolve, destructure into respective variables
+    
+    res.render('tag', { tags, title: 'Tags', tag, stores });
 };
