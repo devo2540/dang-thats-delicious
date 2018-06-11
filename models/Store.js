@@ -46,6 +46,9 @@ storeSchema.index({
     description: 'text'
 });
 
+// index location property for mapping
+storeSchema.index({ location: '2dsphere' });
+
 storeSchema.pre('save', async function (next) {
     if (!this.isModified('name')) {
         next(); // skip it
